@@ -1,0 +1,20 @@
+# Ignorar node_modules y builds del Frontend
+Frontend/SmartRollCall.Web/node_modules/
+Frontend/SmartRollCall.Web/dist/
+Frontend/SmartRollCall.Web/.env
+Frontend/SmartRollCall.Web/.env.*
+!Frontend/SmartRollCall.Web/.env.example
+
+# Ignorar binarios y obj del Backend .NET
+Backend/SmartRollCall.Api/bin/
+Backend/SmartRollCall.Api/obj/
+Backend/SmartRollCall.Api/appsettings.Development.json
+Backend/SmartRollCall.Api/appsettings.Production.json
+Backend/SmartRollCall.Api/*.db
+Backend/SmartRollCall.Api/*.db-shm
+Backend/SmartRollCall.Api/*.db-wal
+
+# Ignorar archivos del OS
+.DS_Store
+Thumbs.db
+context_dump*.md

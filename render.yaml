@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: smart-rollcall-api
+    env: docker
+    region: oregon
+    plan: free
+    dockerContext: Backend/SmartRollCall.Api
+    dockerfilePath: Backend/SmartRollCall.Api/Dockerfile
+    envVars:
+      - key: GoogleCloud__ApiKey
+        sync: false # Poner en la web de Render
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
