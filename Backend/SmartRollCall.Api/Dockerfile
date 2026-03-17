@@ -2,17 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# 1. Copiamos el proyecto y limpiamos cualquier rastro previo
+# Copiar solo el proyecto y restaurar
 COPY ["SmartRollCall.Api.csproj", "./"]
 RUN dotnet restore "SmartRollCall.Api.csproj"
 
-# 2. Copiamos el resto del código
+# Copiar todo el código
 COPY . .
 
-# 3. Borramos carpetas temporales locales que se hayan colado antes de publicar
-RUN rm -rf obj bin
-
-# 4. Publicamos (Quitamos el --no-restore para que él mismo asegure sus archivos)
+# Publicar (Ya no debería fallar por los .resx)
 RUN dotnet publish "SmartRollCall.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Etapa 2: Runtime
@@ -20,7 +17,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Render usa el 8080
+# Render usa el puerto 8080
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
