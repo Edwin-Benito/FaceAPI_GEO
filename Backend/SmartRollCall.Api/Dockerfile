@@ -1,18 +1,24 @@
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["SmartRollCall.Api.csproj", "."]
+
+# Copiar proyecto y restaurar
+COPY ["SmartRollCall.Api.csproj", "./"]
 RUN dotnet restore "SmartRollCall.Api.csproj"
+
+# Copiar TODO el código
 COPY . .
+
+# Publicar (Aquí es donde fallaba antes)
 RUN dotnet publish "SmartRollCall.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Exponer el puerto por el que escuchará Render
-EXPOSE 8080
+# Render usa el puerto 8080 por defecto para Docker
 ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "SmartRollCall.Api.dll"]
